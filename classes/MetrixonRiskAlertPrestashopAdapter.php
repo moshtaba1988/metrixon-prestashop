@@ -159,7 +159,7 @@ class MetrixonRiskAlertPrestashopAdapter
                 COALESCE(pa.wholesale_price, p.wholesale_price) AS wholesale_price,
                 COALESCE(pa.price + p.price, p.price) AS price,
                 sa.quantity AS current_stock,
-                GROUP_CONCAT(DISTINCT al.name ORDER BY agl.position, al.name SEPARATOR " / ") AS variant_name
+                GROUP_CONCAT(DISTINCT al.name ORDER BY ag.position, a.position, al.name SEPARATOR " / ") AS variant_name
             FROM `' . _DB_PREFIX_ . 'product` p
             INNER JOIN `' . _DB_PREFIX_ . 'product_shop` ps
                 ON ps.id_product = p.id_product AND ps.id_shop = ' . (int) $idShop . '
@@ -173,8 +173,8 @@ class MetrixonRiskAlertPrestashopAdapter
                 ON al.id_attribute = pac.id_attribute AND al.id_lang = ' . $idLang . '
             LEFT JOIN `' . _DB_PREFIX_ . 'attribute` a
                 ON a.id_attribute = pac.id_attribute
-            LEFT JOIN `' . _DB_PREFIX_ . 'attribute_group_lang` agl
-                ON agl.id_attribute_group = a.id_attribute_group AND agl.id_lang = ' . $idLang . '
+            LEFT JOIN `' . _DB_PREFIX_ . 'attribute_group` ag
+                ON ag.id_attribute_group = a.id_attribute_group
             LEFT JOIN `' . _DB_PREFIX_ . 'stock_available` sa
                 ON sa.id_product = p.id_product
                 AND sa.id_product_attribute = COALESCE(pa.id_product_attribute, 0)
