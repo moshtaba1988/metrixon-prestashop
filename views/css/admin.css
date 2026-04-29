@@ -1,0 +1,24 @@
+.metrixon-alert-card {
+    border-left: 4px solid #00aff0;
+}
+
+.metrixon-alert-severity-critical {
+    color: #d9534f;
+    font-weight: bold;
+}
+
+.metrixon-alert-severity-high {
+    color: #f0ad4e;
+    font-weight: bold;
+}
+
+.metrixon-timeline {
+    list-style: none;
+    margin: 0;
+    padding-left: 0;
+}
+
+.metrixon-timeline li {
+    border-bottom: 1px solid #eee;
+    padding: 8px 0;
+}
