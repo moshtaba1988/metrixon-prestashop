@@ -74,10 +74,16 @@ class MetrixonRiskAlertPolicy
             $reasonCodes[] = 'ACTIONABLE_REPLENISHMENT';
         }
 
+        $variantKey = isset($variant['variant_key'])
+            ? $variant['variant_key']
+            : (isset($variant['variant_id'])
+                ? $variant['variant_id']
+                : ((int) $variant['id_product'] . ':' . (int) $variant['id_product_attribute']));
+
         return array(
             'qualifies' => $qualifies,
             'failures' => $failures,
-            'variant_key' => $variant['variant_key'],
+            'variant_key' => $variantKey,
             'id_product' => (int) $variant['id_product'],
             'id_product_attribute' => (int) $variant['id_product_attribute'],
             'sku' => $variant['sku'],
@@ -117,6 +123,12 @@ class MetrixonRiskAlertPolicy
         if ($input['risk_snapshot']['margin_source'] === 'variant_cost') {
             $variant['wholesale_price'] = max(0, $variant['unit_price'] - $input['risk_snapshot']['unit_margin']);
         }
+        if (!isset($variant['variant_key'])) {
+            $variant['variant_key'] = isset($variant['variant_id'])
+                ? $variant['variant_id']
+                : ((int) $variant['id_product'] . ':' . (int) $variant['id_product_attribute']);
+        }
+
         $decision = $this->evaluateVariant(
             $variant,
             (int) $input['ranking']['rank_30d'],
