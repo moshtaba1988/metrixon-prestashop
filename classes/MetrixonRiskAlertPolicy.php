@@ -237,8 +237,12 @@ class MetrixonRiskAlertPolicy
             return false;
         }
 
-        $percentileLimit = max(1, (int) ceil($catalogSize * ((float) $this->config['bestseller_percentile'] / 100)));
         $topN = max(1, (int) $this->config['top_n']);
+        if ($this->config['bestseller_mode'] === MetrixonRiskConfig::BESTSELLER_MODE_TOP_N) {
+            return $rank <= $topN;
+        }
+
+        $percentileLimit = max(1, (int) ceil($catalogSize * ((float) $this->config['bestseller_percentile'] / 100)));
 
         return $rank <= $percentileLimit || $rank <= $topN;
     }
